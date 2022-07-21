@@ -1,0 +1,152 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1295254349671736534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1295254349671736532}
+  - component: {fileID: 1295254349671736535}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1295254349671736532
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295254349671736534}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1295254349671736535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295254349671736534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e512e0db6a826845b61b13b8e273c7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: D20 Drop
+    clip: {fileID: 8300000, guid: 366800d63a7d020459d2a31aaf01b133, type: 3}
+    volume: 0.7
+    minPitch: 0.4
+    maxPitch: 0.8
+    loop: 0
+    source: {fileID: 0}
+  - name: D6 Harden
+    clip: {fileID: 8300000, guid: 86c21db93d990d74682f627c0b3f7e4b, type: 3}
+    volume: 0.7
+    minPitch: 1
+    maxPitch: 1.5
+    loop: 0
+    source: {fileID: 0}
+  - name: Enemy Death
+    clip: {fileID: 8300000, guid: 86871f59673bbd745bba62c77913deac, type: 3}
+    volume: 0.7
+    minPitch: 0.5
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Player Hurt
+    clip: {fileID: 8300000, guid: 26ccd2128c3d3004fbfdd948b5ed1c97, type: 3}
+    volume: 0.7
+    minPitch: 0.5
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Player Shoot
+    clip: {fileID: 8300000, guid: 49c4070cdae2b074a91a6783409c5a42, type: 3}
+    volume: 0.5
+    minPitch: 0.3
+    maxPitch: 0.7
+    loop: 0
+    source: {fileID: 0}
+  - name: Enemy Shoot
+    clip: {fileID: 8300000, guid: 25ef36395ba44754e99943c18346a732, type: 3}
+    volume: 0.5
+    minPitch: 0.3
+    maxPitch: 0.7
+    loop: 0
+    source: {fileID: 0}
+  - name: Main Music
+    clip: {fileID: 8300000, guid: 589e3a4aba1b4dc4bab14a7e272aac7d, type: 3}
+    volume: 0.2
+    minPitch: 1
+    maxPitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: New Highscore
+    clip: {fileID: 8300000, guid: 9d71ce4658fce294f80779808dfad316, type: 3}
+    volume: 1
+    minPitch: 1
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Timer Countdown
+    clip: {fileID: 8300000, guid: 79d6cdcca984c4946b7ee1fcd02ed1b6, type: 3}
+    volume: 0.6
+    minPitch: 1
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Timer Go
+    clip: {fileID: 8300000, guid: b699b21217d3c55429e9967034db1224, type: 3}
+    volume: 0.6
+    minPitch: 1
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Enemy Hurt
+    clip: {fileID: 8300000, guid: 97ca21a9f1c0cf444ae7cb67b5c21a5c, type: 3}
+    volume: 0.7
+    minPitch: 0.5
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: D4 Landing
+    clip: {fileID: 8300000, guid: cb4ca22cad6e307478067647aaa46b88, type: 3}
+    volume: 0.7
+    minPitch: 0.7
+    maxPitch: 1.3
+    loop: 0
+    source: {fileID: 0}
+  - name: D20 Explosion
+    clip: {fileID: 8300000, guid: e90c3f35b4e86b540903241b0c115b24, type: 3}
+    volume: 0.7
+    minPitch: 0.5
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Heal
+    clip: {fileID: 8300000, guid: 834336c5b63be9b4e9d0292eba100677, type: 3}
+    volume: 0.7
+    minPitch: 1
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Health Max
+    clip: {fileID: 8300000, guid: 182998134ac1454429e2984a0c9fa257, type: 3}
+    volume: 0.7
+    minPitch: 1
+    maxPitch: 1
+    loop: 0
+    source: {fileID: 0}
