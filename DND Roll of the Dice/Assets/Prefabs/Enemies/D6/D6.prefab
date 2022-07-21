@@ -318,7 +318,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathAnimation: {fileID: 3856851541315920027, guid: ee338a77e70b29d4baaf88f79e221ea9, type: 3}
-  _health: 3
+  _maxHealth: 15
+  _health: 15
 --- !u!1 &268781761067625830
 GameObject:
   m_ObjectHideFlags: 0

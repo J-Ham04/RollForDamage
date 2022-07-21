@@ -9,26 +9,19 @@ public class D6Health :EnemyHealth
     {
         D6Movement em = GetComponent<D6Movement>();
 
-        if (em)
+        if (em == null)
         {
-            if (GetComponent<DiceValue>().value != 6)
-            {
-                if (other.CompareTag("PBullet"))
-                {
-                    TakeDamage();
-                    other.GetComponent<BulletFly>().KillBullet();
-                }
+            return;            
+        }
 
-                if (other.CompareTag("Player"))
-                {
-                    Die();
-                }
-            }
-            else if (GetComponent<DiceValue>().value == 6)
-            {
-                am.Play("D6 Harden");
-                other.GetComponent<BulletFly>().KillBullet();
-            }
+        if (GetComponent<DiceValue>().value != 6)
+        {
+            CheckCollisions(other);
+        }
+        else if (GetComponent<DiceValue>().value == 6)
+        {
+            am.Play("D6 Harden");
+            other.GetComponent<BulletFly>().KillBullet();
         }
     }
 }

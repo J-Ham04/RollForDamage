@@ -104,7 +104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathAnimation: {fileID: 4715633199440280267, guid: 3b1adb904239ef14ea12348603d8e63b, type: 3}
-  _health: 8
+  _maxHealth: 40
+  _health: 40
 --- !u!114 &2360143956259756646
 MonoBehaviour:
   m_ObjectHideFlags: 0

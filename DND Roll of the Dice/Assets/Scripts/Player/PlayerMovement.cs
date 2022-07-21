@@ -10,11 +10,13 @@ public class PlayerMovement : MonoBehaviour
 
     // FIELDS
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float moveSpeedCap;
 
     Rigidbody2D rb;
     Animator anim;
-    Vector2 move;
     public float stunned = 0f;
+
+    private bool usingController;
 
     // PROPERTIES
     public float curSpeed => rb.velocity.magnitude;
@@ -30,8 +32,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        usingController = controls.Gameplay.AimPositionJoystick.IsPressed();
+
         HandleInput();
-        HandleFacingDirection();
+
+        if (usingController == true)
+        {
+            HandleFacingDirectionController(controls.Gameplay.AimPositionJoystick.ReadValue<Vector2>());
+        }
+        else HandleFacingDirectionMouse();
+
         HandleAnimations();
     }
 
@@ -39,11 +49,9 @@ public class PlayerMovement : MonoBehaviour
     {
         controls.Gameplay.Move.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
         controls.Gameplay.Move.canceled += ctx => movementInput = Vector2.zero;
-
-        move = movementInput * moveSpeed;
     }
 
-    void HandleFacingDirection()
+    void HandleFacingDirectionMouse()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         
@@ -51,6 +59,19 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }else if (mousePos.x < transform.position.x)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+    }
+    void HandleFacingDirectionController(Vector2 jPos)
+    {
+        Vector2 mousePos = jPos * 10;
+
+        if (mousePos.x > transform.position.x)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (mousePos.x < transform.position.x)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
         }
@@ -69,10 +90,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(stunned > 0)
+        if (stunned > 0)
         {
             stunned -= Time.fixedDeltaTime;
-        }else rb.velocity = move;
+        }
+        else
+        {
+            rb.velocity += movementInput * moveSpeed;
+        }
+
+        if (curSpeed > moveSpeedCap)
+        {
+            float reduction = moveSpeedCap / curSpeed;
+            rb.velocity *= reduction;
+        }
 
     }
 

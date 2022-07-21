@@ -14,6 +14,7 @@ public class EnemyHealth : MonoBehaviour
 
     private HitFlash hit;
 
+    [SerializeField] private int _maxHealth;
     [SerializeField] private int _health;
 
     // PROPERTIES
@@ -43,7 +44,7 @@ public class EnemyHealth : MonoBehaviour
         am = FindObjectOfType<AudioManager>();
 
         hit = new HitFlash(this, spriteRend);
-        health = _health;
+        _health = _maxHealth;
     }
 
     public virtual void OnTriggerEnter2D(Collider2D other)
@@ -53,22 +54,27 @@ public class EnemyHealth : MonoBehaviour
             return;
         }
 
+        CheckCollisions(other);
+    }
+
+    protected void CheckCollisions(Collider2D other)
+    {
         if (other.CompareTag("PBullet"))
         {
-            TakeDamage();
+            TakeDamage(5);
             other.GetComponent<BulletFly>().KillBullet();
         }
 
         if (other.CompareTag("Player"))
         {
-            Die();
+            TakeDamage(10);
         }
     }
 
-    protected void TakeDamage()
+    protected void TakeDamage(int dmg)
     {
         am.Play("Enemy Hurt");
-        health -= 1;
+        health -= dmg;
         hit.Flash();
     }
 

@@ -20,7 +20,12 @@ public class PlayerShoot : MonoBehaviour
 
     [SerializeField] private float bulletLifetime;
 
+    [SerializeField] private SpriteRenderer shootingArrow;
+
     private AudioManager am;
+
+    private bool isShooting;
+    private bool usingController;
 
     // METHODS
     private void Awake()
@@ -28,20 +33,32 @@ public class PlayerShoot : MonoBehaviour
         am = FindObjectOfType<AudioManager>();
 
         controls = new PlayerControls();
-
-        controls.Gameplay.AimPositionMouse.performed += ctx => PointAtMouse(ctx.ReadValue<Vector2>());
-        controls.Gameplay.AimPositionJoystick.performed += ctx => PointAtJoystick(ctx.ReadValue<Vector2>());
-        controls.Gameplay.Shoot.performed += ctx => Shoot();
     }
 
     void Update()
     {
+        isShooting = controls.Gameplay.Shoot.IsPressed();
+        usingController = controls.Gameplay.AimPositionJoystick.IsPressed();
+
+        if (usingController)
+        {
+            controls.Gameplay.AimPositionJoystick.performed += ctx => PointAtJoystick(ctx.ReadValue<Vector2>());
+        }
+        else PointAtMouse();
+
+        if (isShooting)
+        {
+            Shoot();
+        }
         cooldown -= Time.deltaTime;
     }
 
-    private void PointAtMouse(Vector2 mousePos)
+    private void PointAtMouse()
     {
-        mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        Cursor.visible = true;
+        shootingArrow.enabled = false;
+
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
         Vector2 lookDir = mousePos - new Vector2(transform.position.x, transform.position.y);
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
@@ -49,6 +66,9 @@ public class PlayerShoot : MonoBehaviour
     }
     private void PointAtJoystick(Vector2 jPos)
     {
+        Cursor.visible = false;
+        shootingArrow.enabled = true;
+
         Vector2 lookDir = jPos;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
@@ -56,8 +76,6 @@ public class PlayerShoot : MonoBehaviour
 
     void Shoot()
     {
-
-
         if (cooldown > 0)
         {
             return;

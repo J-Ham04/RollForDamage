@@ -33,7 +33,7 @@ public class EndMenu : MonoBehaviour
     }
     private void Update()
     {
-        if(playerHealth.playerHealth <= 0)
+        if(playerHealth.health <= 0)
         {
             EndGame();
         }
