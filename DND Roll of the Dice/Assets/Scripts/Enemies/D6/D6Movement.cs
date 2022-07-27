@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class D6Movement : MonoBehaviour
+public class D6Movement : EnemyMovement
 {
     private GameObject player;
     private Animator anim;
@@ -36,12 +36,13 @@ public class D6Movement : MonoBehaviour
         if (cooldown > 0)
         {
             cooldown -= Time.deltaTime;
-        }else
+        }else if (isMoving == false && stunned == false)
         {
-            if (isMoving == false)
-            {
                 Move();
-            }
+        }
+        if(stunned == true)
+        {
+            StopCoroutine(CO_Move());
         }
     }
 
@@ -76,5 +77,10 @@ public class D6Movement : MonoBehaviour
         diceValue.value = Random.Range(1, 7);
         anim.SetInteger("face", diceValue.value);
         es.NewDiceValue(diceValue.value + 1);
+    }
+
+    public void Stun()
+    {
+
     }
 }

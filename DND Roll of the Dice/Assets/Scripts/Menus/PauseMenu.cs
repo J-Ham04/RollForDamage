@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using System.Linq;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : InputManager
 {
-    PlayerControls controls;
+    public GameObject resumeButton;
+    public GameObject optionsControllerSelected;
+    public GameObject optionsMenu;
 
     public static bool GameIsPaused = false;
 
@@ -15,8 +20,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Awake()
     {
-        controls = new PlayerControls();
-
+        base.Awake();
         controls.Gameplay.Pause.performed += ctx => PauseInput();
     }
 
@@ -28,20 +32,34 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        base.Update();
         if (em.gameEnded != false)
         {
             return;
+        }
+        if (!usingController)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 
     void PauseInput()
     {
 
+        if (usingController)
+        {
+            EventSystem.current.SetSelectedGameObject(resumeButton);
+        }
+        else EventSystem.current.SetSelectedGameObject(null);
+
         if (GameIsPaused)
         {
             Resume();
         }
-        else Pause();
+        else 
+        {
+            Pause();
+        }
     }
 
     public void Resume()
@@ -58,6 +76,16 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = true;
     }
 
+    public void OpenOptions()
+    {
+        pauseMenuUI.SetActive(false);
+        optionsMenu.SetActive(true);
+        if (usingController)
+        {
+            EventSystem.current.SetSelectedGameObject(optionsControllerSelected);
+        }
+    }
+
     public void LoadMenu()
     {
         Time.timeScale = 1f;
@@ -67,14 +95,5 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-    }
-
-    private void OnEnable()
-    {
-        controls.Gameplay.Enable();
-    }
-    private void OnDisable()
-    {
-        controls.Gameplay.Disable();
     }
 }

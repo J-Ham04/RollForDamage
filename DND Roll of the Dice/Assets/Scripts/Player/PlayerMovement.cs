@@ -3,116 +3,146 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : InputManager
 {
-    PlayerControls controls;
-    Vector2 movementInput;
-
     // FIELDS
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float moveSpeedCap;
+    [Header("Speed Variables")]
+    [SerializeField] private float moveSpeed = 7.5f;
+    [SerializeField] private float maxSpeed = 7.5f;
+    [Range(0f, 1f)]
+    [SerializeField] private float inputSmoothing;
 
-    Rigidbody2D rb;
-    Animator anim;
-    public float stunned = 0f;
+    [Header("Other")]
+    private float timeUntilEndOfStun;
 
-    private bool usingController;
+    [Header("Visuals")]
+    [SerializeField] private float moveAnimationTolerance = 0.1f;
+
+    private Rigidbody2D rb;
+    private Animator anim;
+
+    private Vector2 constantMovementInput;
+    private Vector2 movementInput;
+    private Vector2 movementDirection;
 
     // PROPERTIES
     public float curSpeed => rb.velocity.magnitude;
+    public bool stunned
+    {
+        get
+        {
+            if (timeUntilEndOfStun > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+    public Vector2 moveInput
+    {
+        get
+        {
+            return movementInput;
+        }
+    }
+    public Vector2 constantMoveInput
+    {
+        get
+        {
+            return constantMovementInput;
+        }
+    }
 
     // METHODS
     private void Awake()
     {
+        base.Awake();
         rb = gameObject.GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
         controls = new PlayerControls();
+
+        controls.Gameplay.Move.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
+        controls.Gameplay.Move.canceled += ctx => movementInput = Vector2.zero;
+
+        controls.Gameplay.Move.performed += ctx => constantMovementInput = ctx.ReadValue<Vector2>();
     }
 
     private void Update()
     {
-        usingController = controls.Gameplay.AimPositionJoystick.IsPressed();
+        base.Update();
 
-        HandleInput();
+        HandleAnimations();
 
         if (usingController == true)
         {
-            HandleFacingDirectionController(controls.Gameplay.AimPositionJoystick.ReadValue<Vector2>());
+            Vector2 joyStickPos = controls.Gameplay.AimPositionJoystick.ReadValue<Vector2>() * 100;
+            HandleFacingDirection(joyStickPos);
         }
-        else HandleFacingDirectionMouse();
+        else
+        {
+            HandleFacingDirection(mousePos);
+        }
 
-        HandleAnimations();
     }
 
-    private void HandleInput()
+    private void FixedUpdate()
     {
-        controls.Gameplay.Move.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
-        controls.Gameplay.Move.canceled += ctx => movementInput = Vector2.zero;
+        if (stunned == true)
+        {
+            timeUntilEndOfStun -= Time.deltaTime;
+            return;
+        }
+
+        Move();
+        CapMovementVelocity();
     }
 
-    void HandleFacingDirectionMouse()
+    private void HandleFacingDirection(Vector2 targetPos)
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        
-        if (mousePos.x > transform.position.x)
+        if (targetPos.x > transform.position.x)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
-        }else if (mousePos.x < transform.position.x)
+        }
+        else if (targetPos.x < transform.position.x)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
-    void HandleFacingDirectionController(Vector2 jPos)
-    {
-        Vector2 mousePos = jPos * 10;
-
-        if (mousePos.x > transform.position.x)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
-        else if (mousePos.x < transform.position.x)
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-        }
-    }
-
     private void HandleAnimations()
     {
-        if (curSpeed >= 0.01)
+        if (curSpeed >= moveAnimationTolerance)
         {
             anim.SetBool("moving", true);
-        }else
+        }
+        else
         {
             anim.SetBool("moving", false);
         }
     }
 
-    private void FixedUpdate()
+    private void Move()
     {
-        if (stunned > 0)
+        SmoothInput();
+        rb.velocity = movementDirection * moveSpeed;
+    }
+    private void SmoothInput()
+    {
+        movementDirection = Vector2.Lerp(movementInput, movementDirection, inputSmoothing);
+    }
+    private void CapMovementVelocity()
+    {
+        if (curSpeed <= maxSpeed)
         {
-            stunned -= Time.fixedDeltaTime;
-        }
-        else
-        {
-            rb.velocity += movementInput * moveSpeed;
+            return;
         }
 
-        if (curSpeed > moveSpeedCap)
-        {
-            float reduction = moveSpeedCap / curSpeed;
-            rb.velocity *= reduction;
-        }
-
+        float reduction = maxSpeed / curSpeed;
+        rb.velocity *= reduction;
     }
 
-    private void OnEnable()
+    public void Stun(float stunTime)
     {
-        controls.Gameplay.Enable();
-    }
-    private void OnDisable()
-    {
-        controls.Gameplay.Disable();
+        timeUntilEndOfStun = stunTime;
     }
 }

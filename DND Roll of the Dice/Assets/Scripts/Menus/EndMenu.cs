@@ -4,15 +4,16 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
-public class EndMenu : MonoBehaviour
+public class EndMenu : InputManager
 {
     public GameObject endScreen;
     public TMP_Text scoreUI;
     public TMP_Text highscoreUI;
     public GameObject inGameUI;
-    public GameObject healthBar;
     public GameObject highScoreParticles;
+    public GameObject replayButton;
 
     private AudioManager am;
     private bool highScoreNew;
@@ -25,25 +26,37 @@ public class EndMenu : MonoBehaviour
 
     private void Awake()
     {
+        base.Awake();
         highScoreNew = false;
         uploaded = false;
         playerHealth = FindObjectOfType<PlayerHealth>();
         sm = FindObjectOfType<ScoreManager>();
         am = FindObjectOfType<AudioManager>();
+        controls = new PlayerControls();
     }
     private void Update()
     {
+        base.Update();
         if(playerHealth.health <= 0)
         {
             EndGame();
+        }
+        if (!usingController)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 
     void EndGame()
     {
+        if (usingController == true && gameEnded == false)
+        {
+            EventSystem.current.SetSelectedGameObject(replayButton);
+        }
+        else if (gameEnded == false) EventSystem.current.SetSelectedGameObject(null);
+
         gameEnded = true;
         inGameUI.SetActive(false);
-        healthBar.SetActive(false);
 
         if(uploaded == false)
         {

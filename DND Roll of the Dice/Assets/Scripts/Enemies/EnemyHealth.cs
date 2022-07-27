@@ -14,8 +14,10 @@ public class EnemyHealth : MonoBehaviour
 
     private HitFlash hit;
 
-    [SerializeField] private int _maxHealth;
-    [SerializeField] private int _health;
+    public int _maxHealth;
+    public int _health;
+
+    PlayerWeapon playerWeapon;
 
     // PROPERTIES
     public int health
@@ -37,6 +39,11 @@ public class EnemyHealth : MonoBehaviour
     }
 
     // METHODS
+    private void Awake()
+    {
+        playerWeapon = FindObjectOfType<PlayerWeapon>();
+    }
+
     void Start()
     {
         sm = FindObjectOfType<ScoreManager>();
@@ -71,13 +78,19 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    protected void TakeDamage(int dmg)
+    public void TakeDamage(int dmg)
     {
+        playerWeapon.DealtDamage(dmg);
         am.Play("Enemy Hurt");
         health -= dmg;
         hit.Flash();
+
     }
 
+    public void HealDamage(int heal)
+    {
+        health += heal;
+    }
 
     public virtual void Die()
     {

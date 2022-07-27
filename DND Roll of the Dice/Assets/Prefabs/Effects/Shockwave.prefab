@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shockwaveDuration: 1
-  stunTime: 1
+  stunTime: 0.1
   blastSpeed: 0.1
 --- !u!58 &3798747588077497719
 CircleCollider2D:
@@ -214,7 +214,7 @@ PointEffector2D:
   m_ColliderMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_ForceMagnitude: 60
+  m_ForceMagnitude: 200
   m_ForceVariation: 0
   m_DistanceScale: 5
   m_ForceSource: 0

@@ -10,11 +10,13 @@ TagManager:
   - Shockwave
   - Light
   - HP Pickup
+  - Max HP Up
+  - HealPool
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class D8Movement : MonoBehaviour
+public class D8Movement : EnemyMovement
 {
     private GameObject player;
     private Rigidbody2D rb;
@@ -41,7 +41,7 @@ public class D8Movement : MonoBehaviour
         }
         else
         {
-            if (isMoving == false)
+            if (isMoving == false && stunned == false)
             {
                 Move();
             }

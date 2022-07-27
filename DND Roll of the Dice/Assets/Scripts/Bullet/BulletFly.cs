@@ -22,15 +22,22 @@ public class BulletFly : MonoBehaviour
 
     private void Start()
     {
-        rb.velocity = transform.right * flySpeed;
+        rb.velocity += new Vector2(transform.right.x, transform.right.y) * flySpeed;
     }
 
     private void Update()
     {
-        if (bulletTrail != null)
+        SpawnBulletTrail();
+    }
+
+    private void SpawnBulletTrail()
+    {
+        if (bulletTrail == null)
         {
-            Instantiate(bulletTrail, transform.position, Quaternion.identity);
+            return;
         }
+
+        Instantiate(bulletTrail, transform.position, Quaternion.identity);
     }
 
     public void KillBullet()

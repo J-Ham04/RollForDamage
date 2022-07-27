@@ -26,6 +26,14 @@ public class Sound
 
     public bool loop;
 
+    public enum SoundType
+    {
+        Music,
+        Sfx,
+    }
+
+    public SoundType soundType;
+
     [HideInInspector]
     public AudioSource source;
 }

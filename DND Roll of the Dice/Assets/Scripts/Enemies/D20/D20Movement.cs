@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class D20Movement : MonoBehaviour
+public class D20Movement : EnemyMovement
 {
     private Rigidbody2D rb;
     private GameObject player;
@@ -42,6 +42,14 @@ public class D20Movement : MonoBehaviour
     }
 
     private void FixedUpdate()
+    {
+        if(stunned == false)
+        {
+            Move();
+        }
+    }
+
+    private void Move()
     {
         Vector2 lookDir = playerPos - new Vector2(transform.position.x, transform.position.y);
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;

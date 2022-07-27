@@ -5,7 +5,16 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
+    // FIELDS
     private int _score;
+    private int _highScore;
+
+    private int displayScore;
+
+    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text highScoreText;
+
+    // PROPERTIES
     public int score
     {
         get
@@ -16,25 +25,23 @@ public class ScoreManager : MonoBehaviour
         {
             _score = value;
 
-            if (value >= highScore)
+            if (value >= _highScore)
             {
-                highScore = score;
+                _highScore = score;
             }
         }
     }
-    public int highScore;
-    private int displayScore;
-
-    public TMP_Text scoreText;
-    public TMP_Text highScoreText;
-
-    // Start is called before the first frame update
-    void Start()
+    public int highScore
     {
-        highScore = PlayerPrefs.GetInt("High Score");
+        get { return _highScore; }
     }
 
-    // Update is called once per frame
+    //METHODS
+    void Start()
+    {
+        _highScore = PlayerPrefs.GetInt("High Score");
+    }
+
     void FixedUpdate()
     {
         if (score > displayScore)
